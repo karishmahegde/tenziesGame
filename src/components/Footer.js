@@ -1,3 +1,10 @@
+/*
+ * Component: Footer.js
+ * Description:
+ * The Footer component is rendered on the App Component.
+ * Contains the creators contact details.
+ */
+
 import React from "react";
 
 export default function Footer() {

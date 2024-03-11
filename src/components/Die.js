@@ -1,12 +1,26 @@
-import React from "react";
+/*
+ * Component: Die.js
+ * Description:
+ * Die component is rendered on the App Component to display the die.
+ * Based on the value generated using Math.random() function through 1-6, App Component passed the value through props.
+ * Based on the value, the respective die face is shown.
+ */
 
+import React from "react";
 export default function Die(props) {
   const isHeldStyle = {
+    //If the die is selected, we indicate with a different color and styled accordingly
+    //The 'isHeld' prop value helps check the state of the die
     backgroundColor: props.isHeld ? "#aaba84" : "#FFFFFF",
     boxShadow: props.isHeld
       ? "inset 0 5px #e7ecdc, inset 0 -5px #5a614a, inset 5px 0 #7d856a"
       : "inset 0 5px white, inset 0 -5px #bbb, inset 5px 0 #d7d7d7",
   };
+  /*
+   * Function: generateDieFace()
+   * Parameter: Value - prop.value corresponding to the die face value.
+   * Description: Based on the value, the respective HTML structure and subsequently, the CSS is applied.
+   */
   function generateDieFace(value) {
     if (value === 1) {
       return (
@@ -83,7 +97,7 @@ export default function Die(props) {
   return (
     <div
       className="dieBox"
-      onClick={(event) => props.handleHeld(event, props.id)}
+      onClick={(event) => props.handleHeld(event, props.id)} //OnClick to change the isHeld value when the die is clicked.
     >
       {generateDieFace(props.value)}
     </div>

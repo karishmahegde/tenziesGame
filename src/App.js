@@ -1,3 +1,12 @@
+/*
+ * Component: App.js
+ * Description:
+ * App component renders the Die.js and Footer.js components.
+ * It first generates 10 new die.
+ * Once all 10 die are frozen to the same value, the state 'tenzies' is set to true, delcaring the game as win.
+ * It also records the best score which is the lowest number of rolls.
+ */
+
 import React from "react";
 import Die from "./components/Die.js";
 import { nanoid } from "nanoid";
@@ -6,10 +15,17 @@ import Footer from "./components/Footer.js";
 import "./App.css";
 
 function App() {
-  const [tenzies, setTenzies] = React.useState(false);
-  const [rollCount, setRollCount] = React.useState(0);
-  const [bestRollScore, setBestRollScore] = React.useState(0);
+  const [tenzies, setTenzies] = React.useState(false); //To track the game status
+  const [rollCount, setRollCount] = React.useState(0); //To track the number of rolls for the game
+  const [bestRollScore, setBestRollScore] = React.useState(0); //To track the best roll score which is recorded in localStorage
 
+  /*
+   * Function: generateNewDie()
+   * Description: Generates a single new die element with
+   * unique ID
+   * value (between 1-6), and
+   * isHeld flag set to false
+   */
   function generateNewDie() {
     return {
       id: nanoid(),
@@ -18,6 +34,10 @@ function App() {
     };
   }
 
+  /*
+   * Function: allNewDice()
+   * Description: Generates 10 new dice for a new game
+   */
   function allNewDice() {
     const newDieArr = [];
     for (let i = 0; i < 10; i++) {
@@ -26,17 +46,30 @@ function App() {
     }
     return newDieArr;
   }
-  const [dieVal, setDieVal] = React.useState(allNewDice());
-  const dieSet = dieVal.map((die) => (
-    <Die
-      key={die.id}
-      id={die.id}
-      value={die.value}
-      isHeld={die.isHeld}
-      handleHeld={handleHeld}
-    />
-  ));
+  const [dieVal, setDieVal] = React.useState(allNewDice()); //State storing 10 new dice
+  const dieSet = dieVal.map(
+    (
+      die //Creates a map of the 10 dice
+    ) => (
+      <Die
+        key={die.id}
+        id={die.id}
+        value={die.value}
+        isHeld={die.isHeld}
+        handleHeld={handleHeld}
+      />
+    )
+  );
 
+  /*
+   * Function: handleRoll()
+   * Description: Handles when "Roll" button is clicked
+   * Checks all 10 die. If state 'tenzies' is true, it implies the game is won. Hence new set of dice is generated for the new game.
+   * else, we check the isHeld value
+   * If isHeld is true, that die is retained and pushed unchanged.
+   * else, a new die is generated.
+   * rollCount value is also updated by incrementing by 1
+   */
   function handleRoll() {
     setDieVal((prevDie) => {
       const newDie = [];
@@ -59,14 +92,21 @@ function App() {
     });
   }
 
+  /*
+   * Function: handleHeld()
+   * Description: Called from Die.js Component when a die is clicked on.
+   * Updates the isHeld flag value of the die being clicked.
+   * Pushes the remaining dice objects as is.
+   */
   function handleHeld(event, dieId) {
     setDieVal((prevDie) => {
       const newDie = [];
       for (let i = 0; i < prevDie.length; i++) {
         if (prevDie[i].id === dieId) {
+          //Checking if this is the die that was clicked by checking the unqiue ID value
           const updatedDie = {
             ...prevDie[i],
-            isHeld: !prevDie[i].isHeld,
+            isHeld: !prevDie[i].isHeld, //Implementing toggle. If isHeld is false, it is set to true and vice-versa
           };
           newDie.push(updatedDie);
         } else {
@@ -77,6 +117,7 @@ function App() {
     });
   }
 
+  //Hook to keep track of game status and update 'tenzies' state
   React.useEffect(() => {
     const dieisHeld = dieVal.every((die) => die.isHeld);
     const dieHeldValue = dieVal[0].value;
@@ -86,10 +127,12 @@ function App() {
     }
   }, [dieVal]);
 
+  //Hook to keep track of roll count and set best roll count state
   React.useEffect(() => {
     var bestRollStore = localStorage.getItem("bestRollCount");
     if (!tenzies) {
       if (bestRollStore === null) {
+        //bestRollCount is not present in local storage, initialize it
         localStorage.setItem("bestRollCount", JSON.stringify(Number(0)));
       }
       setBestRollScore(localStorage.getItem("bestRollCount"));
@@ -97,12 +140,14 @@ function App() {
     if (tenzies) {
       bestRollStore = localStorage.getItem("bestRollCount");
       if (bestRollScore === 0) {
+        //If bestRollCount is 0, set it to latest roll count
         setBestRollScore(rollCount);
         localStorage.setItem(
           "bestRollCount",
           JSON.stringify(Number(rollCount))
         );
       } else if (rollCount < bestRollStore) {
+        //Update bestRollCount only if the current game's rollCount is smaller
         setBestRollScore(rollCount);
         localStorage.setItem(
           "bestRollCount",

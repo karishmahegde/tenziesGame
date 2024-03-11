@@ -11,6 +11,7 @@ main {
   align-items: center;
 }
 
+/*Text Styling - START*/
 #headingText {
   margin: 0;
   background: -webkit-linear-gradient(#c36969, #e99191);
@@ -26,7 +27,9 @@ main {
   font-weight: 300;
   text-align: center;
 }
+/*Text Styling - END*/
 
+/*Die Container Styling - START*/
 .dieContainer {
   display: grid;
   grid-template: auto auto / repeat(5, 1fr);
@@ -57,6 +60,7 @@ main {
   flex-direction: column;
   cursor: pointer;
 }
+/*Die Container Styling - END*/
 
 /*Roll Button Styling - START*/
 #rollBtn {
