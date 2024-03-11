@@ -8,8 +8,8 @@
  */
 
 import React from "react";
-import Die from "./components/Die.js";
 import { nanoid } from "nanoid";
+import Die from "./components/Die.js";
 import Confetti from "react-confetti";
 import Footer from "./components/Footer.js";
 import "./App.css";
@@ -162,7 +162,10 @@ function App() {
   return (
     <div>
       {tenzies && (
-        <Confetti width={window.innerWidth} height={window.innerHeight} />
+        <Confetti
+          width={document.body.scrollWidth}
+          height={document.body.scrollHeight}
+        />
       )}
       <main>
         <h1 id="headingText">{tenzies ? "You Won!" : "TENZIES"}</h1>
@@ -171,9 +174,12 @@ function App() {
           current value between rolls.
         </p>
         <div className="dieContainer">{dieSet}</div>
-        <button id="rollBtn" onClick={handleRoll}>
-          {tenzies ? "NEW GAME" : "ROLL"}
-        </button>
+        <div>
+          <button id="rollBtn" onClick={handleRoll}>
+            {tenzies ? "NEW GAME" : "ROLL"}
+          </button>
+        </div>
+
         <div className="statContainer">
           <p>
             <b>Rolls:</b> {rollCount}
