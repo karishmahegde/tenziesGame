@@ -139,7 +139,8 @@ function App() {
     }
     if (tenzies) {
       bestRollStore = localStorage.getItem("bestRollCount");
-      if (bestRollScore === 0) {
+      // eslint-disable-next-line eqeqeq
+      if (bestRollScore == 0) {
         //If bestRollCount is 0, set it to latest roll count
         setBestRollScore(rollCount);
         localStorage.setItem(
